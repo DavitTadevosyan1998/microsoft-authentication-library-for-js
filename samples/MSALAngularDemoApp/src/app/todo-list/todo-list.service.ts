@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Rx";
+import {Observable} from "rxjs";
 import {TodoList} from "./todoList";
+import { map, catchError } from "rxjs/operators";
 
 @Injectable()
 export class TodoListService {
@@ -13,19 +14,22 @@ export class TodoListService {
   }
 
   getItems(): Observable<TodoList[]> {
-    return this.http.get(this.apiEndpoint)
-      .map((response: Response) =>
+    return this.http.get(this.apiEndpoint).pipe(
+      map((response: TodoList[]) =>
         response
-      )
-      .catch(response => (Observable.throw(response)
-      ))
+      ),
+      catchError(response => 
+        Observable.throw(response)
+      ),
+    );
   }
 
   postItem(item: any) {
-    return this.http.post(this.apiEndpoint, item, {responseType: 'text'})
-      .map((response) => {
-        return response;
-      })
+    return this.http.post(this.apiEndpoint, item, {responseType: 'text'}).pipe(
+      map((response) => 
+        response
+      ),
+    );
   }
 
 }

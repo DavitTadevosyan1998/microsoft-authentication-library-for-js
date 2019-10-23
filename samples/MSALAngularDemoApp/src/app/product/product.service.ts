@@ -1,4 +1,4 @@
-import {Product} from './Product'
+import {Product} from './product'
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 
